@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.19
+# v0.19.22
 
 using Markdown
 using InteractiveUtils
@@ -101,7 +101,7 @@ md"  "
 
 # ╔═╡ d2472d6a-7072-49ae-ba55-207db17be3ca
 begin
-    l = 2          # ¡Cambia el valor de l y corre la celda,
+    l = 0.1        # ¡Cambia el valor de l y corre la celda,
     plot(sin,0:l:2π) # y observa qué sucede con la gráfica!
 end
 
@@ -183,6 +183,22 @@ md""" **Ejercicio** Define un parámetro interactivo `d` que controle el nivel d
 
 """
 
+# ╔═╡ de9f21d5-4477-4d83-b8b1-1321414103c0
+@bind d Slider(0.01:0.01:1, default=0.1)
+
+# ╔═╡ 4a5bc569-fe45-4734-8064-d4810652923a
+
+
+# ╔═╡ 17368c42-44e5-4d4e-ac00-d0f2f65a2dd4
+d
+
+# ╔═╡ 9de58f5e-591a-45d6-b412-7b541ee17445
+begin
+	plot(sin,-π:d:π, title = "Funciones trigonométricas", color = "lightgreen", label = "sen", marker=false)
+    scatter!(cos,-π:0.25:π, color = "turquoise", label = "cos", marker = false)
+end
+
+
 # ╔═╡ acfe0334-c7aa-471f-b39e-8276e2e3dd42
 md"""#### El paquete `LaTeXStrings`
 
@@ -200,6 +216,9 @@ md"""Luego, podemos escribir el String anterior simplemente como (¡inténtalo!)
 `L"\sin(x)"` 
 
 Es decir, si escribimos la letra `L` antes del inicio del String y el paquete LaTeXStrings está cargado, Julia interpretará el contenido del String utilizando LaTeX."""
+
+# ╔═╡ 9dc64d76-ed43-48fb-97b0-fe55756e84b2
+L"\sin(x)"
 
 # ╔═╡ 1907f78f-e429-4a77-a90e-c9ebb94d6385
 md"""
@@ -476,21 +495,106 @@ md"""**Ejercicio** Haz un código donde definas cuatro variables `h`, `r`, `θ` 
 
 Sugerencia: Repasa las ecuaciones cinemáticaticas del tiro parabólico e investiga los atributos `xaxis` y `yaxis` para poder fijar los ejes de la gráfica durante la animación."""
 
-# ╔═╡ 50f7f46b-081e-4b07-94af-1331b33a7c7f
-# Tu código (comentado) va aquí :D
+# ╔═╡ 3ba4549d-e02a-48fd-a711-ba114d923a4f
+begin
+
+	#Comencemos definiendo las variables que utilizaremos
+	gr=9.8
+	θ=45
+	h1=10
+	r=5
+	t=8
+
+	#Como el tiro parabolico tiene una velocidad en el eje y y x, vamos a anotar sus dos componentes
+	vx=r*cos(θ)
+	vy=r*sin(θ)
+
+	#Definamos la función posicion que vamos a utilizar para describir nuestro tiro parabolico, y de nuevo se va a descomponer en x y y  
+	px(x) = vx * x
+	py(x) = (vy*x-1/2*gr*x^2+h1)  
+	#Entonces nuestro vector posición se veria de la siguiente forma
+	p(x) = (px(x), py(x))
+        
+	#Ahora que ya tenemos las ecuaciones, describamos nuestro gif que lo llamaremos como tiro_parabolico y usaremos la función @animate
+	tiro_parabolico = @animate for t in 0:0.1:5.5 #5.5 ya que es el tiempo que tarda en caer la pelotita
+	plot(p.( range(-(10),0, step = 0.1) .+ t),
+		
+	#La función dot nos indica que debe ser una línea punteada mientras que lw nos va a indicar el grosor de las lineas punteadas
+		 legend = false, title = L"Tiro Parabolico", ls=:dot, lw=5, xlabel = "Distancia", ylabel = "Altura") 
+
+	#Grafiquemos nuetsras funciones de posición px y py
+	scatter!([px(t)],[py(t)])
+	end #Aquí termina ciclo for
+
+	#Llamamos el gif que nombramos en el for
+	gif(tiro_parabolico, "Tiro_Parabólico.gif", fps = 10)   #Indica el tiempo que se tarda
+	
+end
+
+# ╔═╡ 1a72bf93-281a-46f2-9c4f-a6f9dc6ca5e2
+#Ejercicio 3:)
+begin
+
+	function tiro_parabólico(h1,r,t,θ)
+
+	#Como se menciono la gravedad en el programa anterior, no es necesario mencionarlo 
+	#Como el tiro parabolico tiene una velocidad en el eje y y x, vamos a anotar sus dos componentes
+	vx=r*cos(θ)
+	vy=r*sin(θ)
+
+	#Definamos la función posicion que vamos a utilizar para describir nuestro tiro parabolico, y de nuevo se va a descomponer en x y y  
+	px(x) = vx * x
+	py(x) = (vy*x-1/2*gr*x^2+h1)   
+	p(x) = (px(x), py(x)) 
+        
+	#Ahora que ya tenemos las ecuaciones, describamos nuestro gif que lo llamaremos como tiro_parabolico y usaremos la función @animate
+	tiro_parabolico = @animate for t in 0:0.1:5.5 #5.5 ya que es el tiempo que tarda en caer la pelotita
+	plot(p.( range(-(10),0, step = 0.1) .+ t),
+		
+	#La función dot nos indica que debe ser una línea punteada mientras que lw nos va a indicar el grosor de las lineas punteadas
+		 legend = false, title = L"Tiro Parabolico", ls=:dot, lw=5, xlabel = "Distancia", ylabel = "Altura") 
+
+	#Grafiquemos nuetsras funciones de posición px y py
+	scatter!([px(t)],[py(t)])
+	end #Aquí termina ciclo for
+
+	#Llamamos el gif que nombramos en el for
+	gif(tiro_parabolico, "Tiro_Parabólico.gif", fps = 10)   #Indica el tiempo que se tarda
+	
+end
+end
+
+# ╔═╡ 5cdcf102-b126-402d-88a5-326fa80cfd31
+tiro_parabólico(10,5,8,45)
+
+# ╔═╡ f84c9dc8-5105-46c5-81b5-e374c8b3c9a3
+
 
 # ╔═╡ 59ec3890-303c-436a-8043-8e6bc9c427ed
 md"**Ejercicio** Crea una función que tome parámetros `h`, `r`, `θ` y `t`, y haga lo descrito en el Ejercicio anterior."
-
-# ╔═╡ c3264b4d-81b1-4e0c-9205-ff818665788c
-# Tu código (comentado) va aquí :D
 
 # ╔═╡ 77aacd79-26e3-40c2-ac22-f9121aac4155
 md"""**Ejercicio** Crea una animación de cómo la superficie obtenida de la función $h(x,y) = \cos(x) + \sin(y)$ se desplaza hacia el eje Y.
 """
 
-# ╔═╡ 4e68ad0c-17ef-41f7-b9fe-8561415bb7f2
-# Tu código (comentado) va aquí :D
+# ╔═╡ 7efc0403-db15-4f0c-be5a-6b242b5b0111
+begin
+
+	#Comencemos definiendo las variables con las que vamos a trabajar que en este caso será mi eje x, y y n para utilizarlo en la función range
+	n= 200
+	x= range(0,10,length = n)
+	y= x
+
+	@gif for j in range(0, 2π, length = n)        
+	#La función que se gráficara es la siguiente, donde se muestra que se moverá en el eje y 
+	ñ(x,y) = cos(x) + sin(y+ 10cos(j))      
+	#Ya que definimos la función, procedemos a graficar el eje x, y y la función misma 
+	p = plot(x, y, ñ, st=:wireframe)                              
+	#Nombramos el título y la leyenda que debe tener nuestra gráfica
+	default(legend = false, title = "h(x,y) = cos(x) + sin(y)", xlabel= "x", ylabel= "y")
+		
+	end #Termina el for
+end
 
 # ╔═╡ 88299b4d-2a7d-4c18-956e-c6e75473c658
 md" ## Recursos complementarios
@@ -520,7 +624,7 @@ PlutoUI = "~0.7.38"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.8.4"
+julia_version = "1.8.5"
 manifest_format = "2.0"
 project_hash = "77e2734aeac55d5109eeed492b1ea958eae44caf"
 
@@ -1475,9 +1579,14 @@ version = "0.9.1+5"
 # ╠═fc94b6e8-cae9-46bc-9ac4-9cee5e86c8ee
 # ╟─77a60b5d-ad7f-4c44-a68d-694417619668
 # ╟─8b8aff3c-3d88-4022-bc86-b75ebefde2a3
+# ╠═de9f21d5-4477-4d83-b8b1-1321414103c0
+# ╠═4a5bc569-fe45-4734-8064-d4810652923a
+# ╠═17368c42-44e5-4d4e-ac00-d0f2f65a2dd4
+# ╠═9de58f5e-591a-45d6-b412-7b541ee17445
 # ╟─acfe0334-c7aa-471f-b39e-8276e2e3dd42
 # ╠═8302701b-02ac-4d35-b7de-5dec8fe701fb
 # ╟─02f9778e-21c8-42db-bed6-95a20d592f22
+# ╠═9dc64d76-ed43-48fb-97b0-fe55756e84b2
 # ╟─1907f78f-e429-4a77-a90e-c9ebb94d6385
 # ╠═18368069-bf83-48e9-a6df-a2b5e6181277
 # ╟─ec3dfa07-89c8-48a3-adaf-021c311d2c0d
@@ -1511,11 +1620,13 @@ version = "0.9.1+5"
 # ╠═765a0e10-4217-4a50-8fb1-e46bee83aaa6
 # ╟─abbce622-7912-40ee-8632-261b5129dcb4
 # ╟─7577805b-1d52-47e4-aa45-2652943db1cf
-# ╠═50f7f46b-081e-4b07-94af-1331b33a7c7f
+# ╠═3ba4549d-e02a-48fd-a711-ba114d923a4f
+# ╠═1a72bf93-281a-46f2-9c4f-a6f9dc6ca5e2
+# ╠═5cdcf102-b126-402d-88a5-326fa80cfd31
+# ╠═f84c9dc8-5105-46c5-81b5-e374c8b3c9a3
 # ╟─59ec3890-303c-436a-8043-8e6bc9c427ed
-# ╠═c3264b4d-81b1-4e0c-9205-ff818665788c
 # ╟─77aacd79-26e3-40c2-ac22-f9121aac4155
-# ╠═4e68ad0c-17ef-41f7-b9fe-8561415bb7f2
+# ╠═7efc0403-db15-4f0c-be5a-6b242b5b0111
 # ╟─88299b4d-2a7d-4c18-956e-c6e75473c658
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

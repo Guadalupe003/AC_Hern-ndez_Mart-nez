@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.4
+# v0.19.22
 
 using Markdown
 using InteractiveUtils
@@ -15,7 +15,7 @@ macro bind(def, element)
 end
 
 # ╔═╡ 55d431d6-22a8-4f32-b018-bb6d5c3cdefd
-using Images, ImageView, TestImages, PlutoUI, Colors
+using Images, ImageView, TestImages, PlutoUI, Colors, ColorVectorSpace, ImageShow, FileIO, ImageIO, HypertextLiteral
 
 #= Espera hasta que aparezca una palomita a la derecha de cada 
 biblioteca antes de correr otras celdas de código. Esto puede 
@@ -41,6 +41,9 @@ Sabemos por experiencia propia que las computadoras son capaces de mostrar imág
 
 Como es de esperarse, Julia tiene una gran cantidad de funciones para programar trabajando con imágenes, las cuales se encuentran en diversas bibliotecas como `Images`, `ImageView` y `TestImages`, que en conjunto son conocidas como [_JuliaImages_](https://juliaimages.org/stable/).
 "
+
+# ╔═╡ 23d853df-396b-4218-a8c2-e43099e60b0f
+
 
 # ╔═╡ 9c6c6e89-1dd1-4c45-b56f-00a36003ba85
 md"## Visualización de imágenes con `ImageView`
@@ -125,6 +128,16 @@ nariz = michi[rango_renglones, rango_columnas]
 # ╔═╡ 768e7b46-f7ef-44f8-b69f-f0a9fd4d797f
 md"**Ejercicio** Define una variable `arte_de_pixeles` como un arreglo bidimensional pequeño de `8x8` entradas con todas las celdas en blanco. Luego, edita las celdas de tu arreglo para hacer un poco de arte de pixeles (¡Habrá puntos extra para las imágenes más **originales**!). Pueden consultar algunas imágenes para tomar inspiración [aquí](https://duckduckgo.com/?q=pixel+art&t=h_&iax=images&ia=images)."
 
+# ╔═╡ 492a8b70-6d3d-4190-a852-8000e012a96f
+arte_de_pixeles = [RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0)  	RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0) #Primera línea del pixeleado
+RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67)  	RGB(1.0, 0.51, 0.67) RGB(1.0, 1.0, 1.0)  RGB(1.0, 1.0, 1.0) #Segunda línea del pixeleado
+RGB(1.0, 1.0, 1.0)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67) RGB(1.0, 0.51, 0.67)  RGB(1.0, 1.0, 1.0) #Tercera línea del pixeleado
+RGB(1.0, 1.0, 1.0)  RGB(1.0, 0.24, 0.59)  RGB(1.0, 0.51, 0.67)  RGB(0.0, 0.0, 0.0)  RGB(1.0, 0.51, 0.67)  RGB(0.0, 0.0, 0.0)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.24, 0.59) #Cuarta línea del pixeleado
+RGB(1.0, 0.24, 0.59)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67)  RGB(0.0, 0.0, 0.55)  RGB(1.0, 0.51, 0.67)  RGB(0.0, 0.0, 0.55) RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.24, 0.59) #Quinta línea del pixeleado
+RGB(1.0, 0.24, 0.59)  RGB(1.0, 0.24, 0.59)  RGB(0.8, 0.06, 0.46)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67) RGB(0.8, 0.06, 0.46)  RGB(1.0, 1.0, 1.0) #Sexta línea
+RGB(1.0, 1.0, 1.0)  RGB(0.7, 0.13, 0.13)  RGB(1.0, 0.24, 0.59)  RGB(1.0, 0.24, 0.59)  RGB(1.0, 0.51, 0.67)  RGB(1.0, 0.51, 0.67) RGB(0.7, 0.13, 0.13)  RGB(1.0, 1.0, 1.0) #Cuarta línea
+RGB(1.0, 1.0, 1.0)  RGB(0.7, 0.13, 0.13)  RGB(0.7, 0.13, 0.13)  RGB(0.7, 0.13, 0.13)  RGB(1.0, 1.0, 1.0)  RGB(0.7, 0.13, 0.13) RGB(0.7, 0.13, 0.13)  RGB(1.0, 1.0, 1.0)] #Cuarta línea
+
 # ╔═╡ 8270b927-ac96-4e45-8c26-47995b036313
 md""" ## Guardar imágenes
 
@@ -133,7 +146,13 @@ Podemos guardar imágenes con la función `save(s,i)`, donde `s` es un _string_ 
 """
 
 # ╔═╡ 3e886602-1dbe-4000-8993-eab5d9edae54
-save("gato.png",michi)
+# save("nariz.png",nariz)
+
+# ╔═╡ d00fa153-43f0-44df-a2c2-f7511c8472bb
+
+
+# ╔═╡ 76e081d0-c81a-4435-9d05-d9028fcc0ea8
+
 
 # ╔═╡ 47dbad09-c809-4a65-b25b-f3e049efb69f
 md"## Recursos complementarios
@@ -143,14 +162,24 @@ md"## Recursos complementarios
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+ColorVectorSpace = "c3611d14-8923-5661-9e6a-0046d554d3a4"
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
+ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
 ImageView = "86fae568-95e7-573e-a6b2-d8a6b900c9ef"
 Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 TestImages = "5e47fb64-e119-507b-a336-dd2b206d9990"
 
 [compat]
+ColorVectorSpace = "~0.9.10"
 Colors = "~0.12.8"
+FileIO = "~1.16.0"
+HypertextLiteral = "~0.9.4"
+ImageIO = "~0.6.6"
+ImageShow = "~0.3.7"
 ImageView = "~0.10.15"
 Images = "~0.25.1"
 PlutoUI = "~0.7.34"
@@ -161,8 +190,9 @@ TestImages = "~1.6.2"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.2"
+julia_version = "1.8.5"
 manifest_format = "2.0"
+project_hash = "d10560306692131b0dd4a152b4dbbb99bed3ca88"
 
 [[deps.ATK_jll]]
 deps = ["Artifacts", "Glib_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -190,6 +220,7 @@ version = "3.3.3"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
+version = "1.1.1"
 
 [[deps.ArnoldiMethod]]
 deps = ["LinearAlgebra", "Random", "StaticArrays"]
@@ -239,7 +270,7 @@ uuid = "159f3aea-2a34-519c-b102-8c37f9878175"
 version = "1.0.5"
 
 [[deps.Cairo_jll]]
-deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
+deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
 git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.16.1+1"
@@ -274,6 +305,12 @@ git-tree-sha1 = "75479b7df4167267d75294d14b58244695beb2ac"
 uuid = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 version = "0.14.2"
 
+[[deps.ColorSchemes]]
+deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Random", "SnoopPrecompile"]
+git-tree-sha1 = "aa3edc8f8dea6cbfa176ee12f7c2fc82f0608ed3"
+uuid = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
+version = "3.20.0"
+
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
 git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
@@ -282,9 +319,9 @@ version = "0.11.0"
 
 [[deps.ColorVectorSpace]]
 deps = ["ColorTypes", "FixedPointNumbers", "LinearAlgebra", "SpecialFunctions", "Statistics", "TensorCore"]
-git-tree-sha1 = "3f1f500312161f1ae067abe07d13b40f78f32e07"
+git-tree-sha1 = "600cc5508d66b78aae350f7accdb58763ac18589"
 uuid = "c3611d14-8923-5661-9e6a-0046d554d3a4"
-version = "0.9.8"
+version = "0.9.10"
 
 [[deps.Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
@@ -301,6 +338,7 @@ version = "3.41.0"
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+version = "1.0.1+0"
 
 [[deps.ComputationalResources]]
 git-tree-sha1 = "52cb3ec90e8a8bea0e62e275ba577ad0f74821f7"
@@ -360,8 +398,9 @@ uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 version = "0.8.6"
 
 [[deps.Downloads]]
-deps = ["ArgTools", "LibCURL", "NetworkOptions"]
+deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+version = "1.6.0"
 
 [[deps.DualNumbers]]
 deps = ["Calculus", "NaNMath", "SpecialFunctions"]
@@ -401,9 +440,12 @@ version = "3.3.10+0"
 
 [[deps.FileIO]]
 deps = ["Pkg", "Requires", "UUIDs"]
-git-tree-sha1 = "67551df041955cc6ee2ed098718c8fcd7fc7aebe"
+git-tree-sha1 = "7be5f99f7d15578798f338f5433b6c432ea8037b"
 uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
-version = "1.12.0"
+version = "1.16.0"
+
+[[deps.FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
@@ -443,9 +485,9 @@ version = "0.21.0+0"
 
 [[deps.Ghostscript_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "78e2c69783c9753a91cdae88a8d432be85a2ab5e"
+git-tree-sha1 = "43ba3d3c82c18d88471cfd2924931658838c9d8f"
 uuid = "61579ee1-b43e-5ca0-a5da-69d92c66a64b"
-version = "9.55.0+0"
+version = "9.55.0+4"
 
 [[deps.Glib_jll]]
 deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE_jll", "Pkg", "Zlib_jll"]
@@ -496,9 +538,10 @@ uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
 version = "0.0.4"
 
 [[deps.HypertextLiteral]]
-git-tree-sha1 = "2b078b5a615c6c0396c77810d92ee8c6f470d238"
+deps = ["Tricks"]
+git-tree-sha1 = "c47c5fa4c5308f27ccaac35504858d8914e102f9"
 uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
-version = "0.9.3"
+version = "0.9.4"
 
 [[deps.IOCapture]]
 deps = ["Logging", "Random"]
@@ -548,10 +591,10 @@ uuid = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
 version = "0.7.1"
 
 [[deps.ImageIO]]
-deps = ["FileIO", "Netpbm", "OpenEXR", "PNGFiles", "QOI", "Sixel", "TiffImages", "UUIDs"]
-git-tree-sha1 = "816fc866edd8307a6e79a575e6585bfab8cef27f"
+deps = ["FileIO", "IndirectArrays", "JpegTurbo", "LazyModules", "Netpbm", "OpenEXR", "PNGFiles", "QOI", "Sixel", "TiffImages", "UUIDs"]
+git-tree-sha1 = "342f789fd041a55166764c351da1710db97ce0e0"
 uuid = "82e4d734-157c-48bb-816b-45c225c6df19"
-version = "0.6.0"
+version = "0.6.6"
 
 [[deps.ImageMagick]]
 deps = ["FileIO", "ImageCore", "ImageMagick_jll", "InteractiveUtils", "Libdl", "Pkg", "Random"]
@@ -561,9 +604,9 @@ version = "1.2.1"
 
 [[deps.ImageMagick_jll]]
 deps = ["Artifacts", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pkg", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "f025b79883f361fa1bd80ad132773161d231fd9f"
+git-tree-sha1 = "124626988534986113cfd876e3093e4a03890f58"
 uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
-version = "6.9.12+2"
+version = "6.9.12+3"
 
 [[deps.ImageMetadata]]
 deps = ["AxisArrays", "ImageAxes", "ImageBase", "ImageCore"]
@@ -590,10 +633,10 @@ uuid = "80713f31-8817-5129-9cf8-209ff8fb23e1"
 version = "1.7.0"
 
 [[deps.ImageShow]]
-deps = ["Base64", "FileIO", "ImageBase", "ImageCore", "OffsetArrays", "StackViews"]
-git-tree-sha1 = "d0ac64c9bee0aed6fdbb2bc0e5dfa9a3a78e3acc"
+deps = ["Base64", "ColorSchemes", "FileIO", "ImageBase", "ImageCore", "OffsetArrays", "StackViews"]
+git-tree-sha1 = "ce28c68c900eed3cdbfa418be66ed053e54d4f56"
 uuid = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
-version = "0.3.3"
+version = "0.3.7"
 
 [[deps.ImageTransformations]]
 deps = ["AxisAlgorithms", "ColorVectorSpace", "CoordinateTransformations", "ImageBase", "ImageCore", "Interpolations", "OffsetArrays", "Rotations", "StaticArrays"]
@@ -691,6 +734,12 @@ git-tree-sha1 = "8076680b162ada2a031f707ac7b4953e30667a37"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.2"
 
+[[deps.JpegTurbo]]
+deps = ["CEnum", "FileIO", "ImageCore", "JpegTurbo_jll", "TOML"]
+git-tree-sha1 = "106b6aa272f294ba47e96bd3acbabdc0407b5c60"
+uuid = "b835a17e-a41a-41e7-81f0-2f016b05efe0"
+version = "0.1.2"
+
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "d735490ac75c5cb9f1b00d8b5509c11984dc6943"
@@ -713,13 +762,20 @@ version = "2.10.1+0"
 deps = ["Artifacts", "Pkg"]
 uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
 
+[[deps.LazyModules]]
+git-tree-sha1 = "a560dd966b386ac9ae60bdd3a3d3a326062d3c3e"
+uuid = "8cdb02fc-e678-4876-92c5-9defec4f444e"
+version = "0.3.1"
+
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
 uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
+version = "0.6.3"
 
 [[deps.LibCURL_jll]]
 deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
+version = "7.84.0+0"
 
 [[deps.LibGit2]]
 deps = ["Base64", "NetworkOptions", "Printf", "SHA"]
@@ -728,6 +784,7 @@ uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
+version = "1.10.2+0"
 
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
@@ -764,9 +821,9 @@ version = "1.42.0+0"
 
 [[deps.Libiconv_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "42b62845d70a619f063a7da093d995ec8e15e778"
+git-tree-sha1 = "c7cb1f5d892775ba13767a87c7ada0b980ea0a71"
 uuid = "94ce4f54-9a6c-5748-9c1c-f9c7231a4531"
-version = "1.16.1+1"
+version = "1.16.1+2"
 
 [[deps.Libmount_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -829,6 +886,7 @@ uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 [[deps.MbedTLS_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
+version = "2.28.0+0"
 
 [[deps.MetaGraphs]]
 deps = ["Graphs", "JLD2", "Random"]
@@ -853,6 +911,7 @@ version = "0.3.3"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
+version = "2022.2.1"
 
 [[deps.NaNMath]]
 git-tree-sha1 = "b086b7ea07f8e38cf122f5016af580881ac914fe"
@@ -873,6 +932,7 @@ version = "1.0.2"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+version = "1.2.0"
 
 [[deps.OffsetArrays]]
 deps = ["Adapt"]
@@ -883,6 +943,7 @@ version = "1.10.8"
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+version = "0.3.20+0"
 
 [[deps.OpenEXR]]
 deps = ["Colors", "FileIO", "OpenEXR_jll"]
@@ -899,6 +960,7 @@ version = "3.1.1+0"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
+version = "0.8.1+0"
 
 [[deps.OpenSpecFun_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -956,6 +1018,7 @@ version = "0.40.1+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+version = "1.8.0"
 
 [[deps.PkgVersion]]
 deps = ["Pkg"]
@@ -1052,6 +1115,7 @@ version = "1.1.0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+version = "0.7.0"
 
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
@@ -1077,6 +1141,12 @@ deps = ["Dates", "FileIO", "ImageCore", "IndirectArrays", "OffsetArrays", "REPL"
 git-tree-sha1 = "8fb59825be681d451c246a795117f317ecbcaa28"
 uuid = "45858cf5-a6b0-47a3-bbea-62219f50df47"
 version = "0.1.2"
+
+[[deps.SnoopPrecompile]]
+deps = ["Preferences"]
+git-tree-sha1 = "e760a70afdcd461cf01a575947738d359234665c"
+uuid = "66db9d55-30c0-4569-8b51-7e840670fc0c"
+version = "1.0.3"
 
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
@@ -1139,10 +1209,12 @@ version = "0.11.2"
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+version = "1.0.0"
 
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
+version = "1.10.1"
 
 [[deps.TensorCore]]
 deps = ["LinearAlgebra"]
@@ -1177,6 +1249,11 @@ deps = ["Random", "Test"]
 git-tree-sha1 = "216b95ea110b5972db65aa90f88d8d89dcb8851c"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
 version = "0.9.6"
+
+[[deps.Tricks]]
+git-tree-sha1 = "aadb748be58b492045b4f56166b5188aa63ce549"
+uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
+version = "0.1.7"
 
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
@@ -1337,6 +1414,7 @@ version = "1.4.0+3"
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
+version = "1.2.12+3"
 
 [[deps.Zstd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1383,6 +1461,7 @@ version = "4.3.0+4"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
+version = "5.1.1+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -1399,10 +1478,12 @@ version = "1.8.6+1"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
+version = "1.48.0+0"
 
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
+version = "17.4.0+0"
 
 [[deps.xkbcommon_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Wayland_jll", "Wayland_protocols_jll", "Xorg_libxcb_jll", "Xorg_xkeyboard_config_jll"]
@@ -1415,6 +1496,7 @@ version = "0.9.1+5"
 # ╟─c885e437-172e-406f-b1ac-cb4834812a1a
 # ╟─d880df39-77b3-47a4-b4ee-0a1ec9d466b2
 # ╠═55d431d6-22a8-4f32-b018-bb6d5c3cdefd
+# ╠═23d853df-396b-4218-a8c2-e43099e60b0f
 # ╟─9c6c6e89-1dd1-4c45-b56f-00a36003ba85
 # ╟─3db215d8-e62d-42cb-9423-37466e89795b
 # ╠═289a3331-e1a2-45e4-80ca-c334e6fd8b69
@@ -1434,8 +1516,11 @@ version = "0.9.1+5"
 # ╠═25541a59-3f11-4d5c-afe9-0e3a287ca5c2
 # ╠═176d687c-acf1-4516-9c45-0f52800bfcf3
 # ╟─768e7b46-f7ef-44f8-b69f-f0a9fd4d797f
+# ╠═492a8b70-6d3d-4190-a852-8000e012a96f
 # ╟─8270b927-ac96-4e45-8c26-47995b036313
 # ╠═3e886602-1dbe-4000-8993-eab5d9edae54
+# ╠═d00fa153-43f0-44df-a2c2-f7511c8472bb
+# ╠═76e081d0-c81a-4435-9d05-d9028fcc0ea8
 # ╟─47dbad09-c809-4a65-b25b-f3e049efb69f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
